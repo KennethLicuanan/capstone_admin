@@ -16,4 +16,11 @@
   .logo img{
     margin-left: 30px;
   }
+  .ionlist{
+    font-weight: bolder;
+  }
+  .add{
+    margin-left: 65%;
+    width: 30%;
+  }
   

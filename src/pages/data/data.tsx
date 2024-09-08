@@ -5,9 +5,10 @@ const Data: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-      <IonBackButton className='back' defaultHref="/" />
+      
         <IonToolbar>
-          <IonTitle>Home</IonTitle>
+        <IonBackButton className='back' defaultHref="/" />
+          <IonTitle>Home</IonTitle><br />
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>

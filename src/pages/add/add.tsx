@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonBackButton,
-  IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
-
+  IonCard, 
+  IonInput, IonItem, IonList, IonIcon
   } 
 from '@ionic/react';
 import './add.css';
@@ -9,9 +9,9 @@ const Add: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-      <IonBackButton className='back' defaultHref="/" />
         <IonToolbar>
-          <IonTitle>Home</IonTitle>
+        <IonBackButton className='back' defaultHref="/" />
+          <IonTitle>Home</IonTitle><br />
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>
@@ -22,14 +22,33 @@ const Add: React.FC = () => {
           </div>
         </div>
 
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Card Title</IonCardTitle>
-            <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
-          </IonCardHeader>
+        <IonCard><br />
+                <IonList className='ionlist'>
+              <IonItem>
+                <IonInput label="TITLE: "></IonInput>
+              </IonItem>
 
-          <IonCardContent>Here's a small text description for the card content. Nothing more, nothing less.</IonCardContent>
-    </IonCard>
+              <IonItem>
+                <IonInput label="AUTHORS: "></IonInput>
+              </IonItem>
+
+              <IonItem>
+                <IonInput label="ABSTRACT: "></IonInput>
+              </IonItem>
+
+              <IonItem>
+                <IonInput label="TAGS/KEYWRODS: "></IonInput>
+              </IonItem>
+
+              <IonItem>
+                <IonInput label="YEAR: "></IonInput>
+              </IonItem>
+<br />
+              <IonButton color={'dark'} className='add' >ADD</IonButton><br />
+              <br />
+            </IonList>
+
+          </IonCard>
 
       </IonContent>
     </IonPage>
