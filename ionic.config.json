@@ -1,0 +1,7 @@
+{
+  "name": "capstone_admin",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
