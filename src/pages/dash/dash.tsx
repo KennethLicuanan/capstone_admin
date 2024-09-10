@@ -1,7 +1,15 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/react';
-import './Home.css';
+import './dash.css';
 
-const Home: React.FC = () => {
+const Dash: React.FC = () => {
+
+  const handleLogout = () => {
+    // Clear user session or authentication tokens here if needed
+    console.log('Logging out...');
+    // Redirect to login page
+    window.location.href = '/login'; // Replace '/login' with the actual route to your login page
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -24,10 +32,12 @@ const Home: React.FC = () => {
           <IonButton expand="block" color={'light'} className="custom-button" routerLink="/data">
             DATA ANALYTICS
           </IonButton>
+          {/* Logout Button */}
+          <IonButton expand="block" color={'danger'} className="custom-button" onClick={handleLogout}>Logout</IonButton>
         </div>
       </IonContent>
     </IonPage>
   );
 };
 
-export default Home;
+export default Dash;
