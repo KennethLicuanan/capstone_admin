@@ -12,9 +12,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/android": "^6.1.2",
     "@capacitor/app": "6.0.1",
+    "@capacitor/camera": "^6.0.2",
     "@capacitor/core": "6.1.2",
     "@capacitor/haptics": "6.0.1",
+    "@capacitor/ios": "^6.1.2",
     "@capacitor/keyboard": "6.0.2",
     "@capacitor/status-bar": "6.0.1",
     "@ionic/react": "^8.0.0",
@@ -36,6 +39,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/tesseract.js": "^2.0.0",
     "@vitejs/plugin-legacy": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.1",
     "cypress": "^13.5.0",
