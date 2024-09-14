@@ -28,3 +28,97 @@
     margin-left: 30px;
   }
   
+
+
+
+  
+  /* Styling for the entire card that holds the logs */
+.logs-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  animation: fadeIn 1s ease-out;
+  overflow: hidden; /* Ensure that overflowing content is hidden */
+}
+
+/* Header style for the logs section */
+.logs-card h2 {
+  font-size: 1.6rem;
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Table styling */
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensure columns do not exceed card boundaries */
+}
+
+.logs-table th, .logs-table td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  text-align: left;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  word-wrap: break-word; /* Break words that are too long */
+}
+
+.logs-table th {
+  background-color: #007bff;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Define column widths */
+.logs-table th:nth-child(1),
+.logs-table td:nth-child(1) {
+  width: 10%;
+}
+
+.logs-table th:nth-child(2),
+.logs-table td:nth-child(2) {
+  width: 25%;
+}
+
+.logs-table th:nth-child(3),
+.logs-table td:nth-child(3) {
+  width: 35%;
+}
+
+.logs-table th:nth-child(4),
+.logs-table td:nth-child(4) {
+  width: 30%;
+}
+
+.logs-table tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+.logs-table tr:hover {
+  background-color: #e9ecef;
+}
+
+.logs-table td {
+  color: #333;
+}
+
+/* No logs message styling for table */
+.no-logs-message {
+  text-align: center;
+  font-size: 1rem;
+  color: #999;
+}
+
+/* Animation for card fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

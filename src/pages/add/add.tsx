@@ -199,29 +199,35 @@ const Add: React.FC = () => {
           </div>
         </div>
 
-        <IonCard><br />
-          <IonList className='ionlist'>
-            <IonItem>
+        <IonCard ><br />
+          <IonList  className='ionlist'>
+            <IonItem >
               <IonTextarea id="titleInput" label="TITLE: " autoGrow={true} ></IonTextarea>
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('titleInput')} />
             </IonItem>
 
-            <IonItem>
+            <IonItem >
               <IonTextarea id="authorsInput" label="AUTHORS: " autoGrow={true} ></IonTextarea>
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('authorsInput')} />
             </IonItem>
 
-            <IonItem>
+            <IonItem >
               <IonTextarea id="abstractInput" label="ABSTRACT: " autoGrow={true}></IonTextarea>
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('abstractInput')} />
             </IonItem>
 
-            <IonItem>
+            <IonItem >
               <IonTextarea id="tagsInput" label="TAGS/KEYWORDS: " autoGrow={true} ></IonTextarea>
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('tagsInput')} />
             </IonItem>
 
-            <IonItem>
+            {/* New Category Text Area */}
+            <IonItem >
+              <IonTextarea id="categoryInput" label="CATEGORY: " autoGrow={true}></IonTextarea>
+              <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('categoryInput')} />
+            </IonItem>
+
+            <IonItem >
               <IonInput id="yearInput" label="YEAR: "></IonInput>
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('yearInput')} />
             </IonItem>
