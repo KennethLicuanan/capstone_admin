@@ -223,13 +223,11 @@ const Add: React.FC = () => {
 
             {/* New Category Text Area */}
             <IonItem >
-              <IonTextarea id="categoryInput" label="CATEGORY: " autoGrow={true}></IonTextarea>
-              <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('categoryInput')} />
+              <IonTextarea id="categoryInput" label="IDENTIFIER: " autoGrow={true}></IonTextarea>
             </IonItem>
 
             <IonItem >
               <IonInput id="yearInput" label="YEAR: "></IonInput>
-              <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('yearInput')} />
             </IonItem>
             <br />
             <IonButton color={'dark'} className='add'>ADD</IonButton><br />
