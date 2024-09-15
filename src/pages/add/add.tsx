@@ -183,11 +183,43 @@ const Add: React.FC = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
+  const handleSubmit = async () => {
+    const title = (document.getElementById('titleInput') as HTMLTextAreaElement).value;
+    const authors = (document.getElementById('authorsInput') as HTMLTextAreaElement).value;
+    const abstract = (document.getElementById('abstractInput') as HTMLTextAreaElement).value;
+    const tags = (document.getElementById('tagsInput') as HTMLTextAreaElement).value;
+    const year = (document.getElementById('yearInput') as HTMLInputElement).value;
+    const identifier = (document.getElementById('categoryInput') as HTMLTextAreaElement).value;
+
+    console.log({ title, authors, abstract, tags, year, identifier }); // Debugging line
+
+    try {
+      const response = await fetch('http://localhost:8100/add-study', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, authors, abstract, tags, year, identifier }),
+      });
+
+      if (response.ok) {
+        alert('Study added successfully!');
+      } else {
+        const errorText = await response.text(); // Get the response text to display
+        console.error('Server Error:', errorText);
+        alert(`Failed to add study: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error adding study:', error);
+      alert('An error occurred while adding the study.');
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonBackButton className='back' defaultHref="/" />
+      <IonBackButton className='back' defaultHref="/" />
           <IonTitle>Home</IonTitle><br />
         </IonToolbar>
       </IonHeader>
@@ -221,16 +253,15 @@ const Add: React.FC = () => {
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('tagsInput')} />
             </IonItem>
 
-            {/* New Category Text Area */}
-            <IonItem >
-              <IonTextarea id="categoryInput" label="IDENTIFIER: " autoGrow={true}></IonTextarea>
-            </IonItem>
-
             <IonItem >
               <IonInput id="yearInput" label="YEAR: "></IonInput>
             </IonItem>
+
+            <IonItem >
+              <IonTextarea id="categoryInput" label="IDENTIFIER: " autoGrow={true}></IonTextarea>
+            </IonItem>
             <br />
-            <IonButton color={'dark'} className='add'>ADD</IonButton><br />
+            <IonButton color={'dark'} className='add' onClick={handleSubmit}>ADD</IonButton><br />
             <br />
           </IonList>
         </IonCard>
