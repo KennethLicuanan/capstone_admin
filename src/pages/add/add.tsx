@@ -185,25 +185,32 @@ const Add: React.FC = () => {
 
   const handleSubmit = async () => {
     const title = (document.getElementById('titleInput') as HTMLTextAreaElement).value;
-    const authors = (document.getElementById('authorsInput') as HTMLTextAreaElement).value;
+    const author = (document.getElementById('authorsInput') as HTMLTextAreaElement).value;
     const abstract = (document.getElementById('abstractInput') as HTMLTextAreaElement).value;
-    const tags = (document.getElementById('tagsInput') as HTMLTextAreaElement).value;
+    const keywords = (document.getElementById('tagsInput') as HTMLTextAreaElement).value;
     const year = (document.getElementById('yearInput') as HTMLInputElement).value;
     const identifier = (document.getElementById('categoryInput') as HTMLTextAreaElement).value;
-
-    console.log({ title, authors, abstract, tags, year, identifier }); // Debugging line
-
+  
+    console.log({ title, author, abstract, keywords, year, identifier });
+  
     try {
-      const response = await fetch('http://localhost:8100/add-study', {
+      const response = await fetch('http://localhost:3000/add-study', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, authors, abstract, tags, year, identifier }),
+        body: JSON.stringify({ title, author, abstract, keywords, year, identifier }),
       });
-
+  
       if (response.ok) {
         alert('Study added successfully!');
+        // Clear the input fields after successful addition
+        (document.getElementById('titleInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('authorsInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('abstractInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('tagsInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('yearInput') as HTMLInputElement).value = '';
+        (document.getElementById('categoryInput') as HTMLTextAreaElement).value = '';
       } else {
         const errorText = await response.text(); // Get the response text to display
         console.error('Server Error:', errorText);
@@ -214,6 +221,8 @@ const Add: React.FC = () => {
       alert('An error occurred while adding the study.');
     }
   };
+  
+  
 
   return (
     <IonPage>

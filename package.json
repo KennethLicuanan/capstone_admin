@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+    "express": "^latest",
+    "mysql": "^latest",
+    "cors": "^latest",
+    "body-parser": "^latest",
+  
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

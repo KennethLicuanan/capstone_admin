@@ -1,22 +1,24 @@
-const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+import express from 'express';
+import mysql from 'mysql';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 const app = express();
-const port = 8100;
+const port = 3000;
 
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Create a connection to the database
+// connection to the database
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // Replace with your MySQL username
-  password: '', // Replace with your MySQL password
+  user: 'root', 
+  password: '', 
   database: 'capstonedb'
 });
 
+// Connect to the database
 db.connect((err) => {
   if (err) {
     console.error('Database connection error:', err.message);
@@ -27,14 +29,16 @@ db.connect((err) => {
 
 // Route to add a study
 app.post('/add-study', (req, res) => {
-  const { title, authors, abstract, tags, year, identifier } = req.body;
+  const { title, author, abstract, keywords, year, identifier } = req.body;
 
-  if (!title || !authors || !abstract || !tags || !year || !identifier) {
+  // Validate that all fields are provided
+  if (!title || !author || !abstract || !keywords || !year || !identifier) {
     return res.status(400).send('All fields are required.');
   }
 
+  // SQL query to insert the study
   const sql = 'INSERT INTO studiestbl (title, author, abstract, keywords, year, identifier) VALUES (?, ?, ?, ?, ?, ?)';
-  const values = [title, authors, abstract, tags, year, identifier];
+  const values = [title, author, abstract, keywords, year, identifier];
 
   db.query(sql, values, (err, result) => {
     if (err) {
@@ -45,6 +49,7 @@ app.post('/add-study', (req, res) => {
   });
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
