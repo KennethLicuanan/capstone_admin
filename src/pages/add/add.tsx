@@ -13,7 +13,9 @@ import {
   IonIcon, 
   IonTextarea,
   IonModal,
-  IonActionSheet
+  IonActionSheet,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/react';
 import { addCircle } from 'ionicons/icons';
 import Tesseract from 'tesseract.js';
@@ -25,6 +27,8 @@ const Add: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [currentInputId, setCurrentInputId] = useState<string | null>(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<string>('');
+  const [identifierOptions, setIdentifierOptions] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -183,25 +187,46 @@ const Add: React.FC = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
+  const handleProgramChange = (event: CustomEvent) => {
+    const program = (event.detail.value as string);
+    setSelectedProgram(program);
+
+    // Update identifier options based on the selected program
+    switch (program) {
+      case 'BSIT':
+        setIdentifierOptions(['WEB-BASED', 'WEB-APP', 'MOBILE APP', 'IOT']);
+        break;
+      case 'TEP':
+        setIdentifierOptions(['BEED', 'BSED', 'BECE']);
+        break;
+      case 'BSBA':
+        setIdentifierOptions(['MM', 'FM', 'OM']);
+        break;
+      default:
+        setIdentifierOptions([]);
+    }
+  };
+
   const handleSubmit = async () => {
     const title = (document.getElementById('titleInput') as HTMLTextAreaElement).value;
     const author = (document.getElementById('authorsInput') as HTMLTextAreaElement).value;
     const abstract = (document.getElementById('abstractInput') as HTMLTextAreaElement).value;
     const keywords = (document.getElementById('tagsInput') as HTMLTextAreaElement).value;
     const year = (document.getElementById('yearInput') as HTMLInputElement).value;
-    const identifier = (document.getElementById('categoryInput') as HTMLTextAreaElement).value;
-  
-    console.log({ title, author, abstract, keywords, year, identifier });
-  
+    const identifier = (document.getElementById('identifierSelect') as HTMLSelectElement).value;
+    const type = (document.getElementById('typeSelect') as HTMLSelectElement).value;
+
+    console.log({ title, author, abstract, keywords, year, identifier, type });
+
     try {
       const response = await fetch('http://localhost:3000/add-study', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, author, abstract, keywords, year, identifier }),
+        body: JSON.stringify({ title, author, abstract, keywords, year, identifier, type }),
       });
-  
+
       if (response.ok) {
         alert('Study added successfully!');
         // Clear the input fields after successful addition
@@ -210,7 +235,8 @@ const Add: React.FC = () => {
         (document.getElementById('abstractInput') as HTMLTextAreaElement).value = '';
         (document.getElementById('tagsInput') as HTMLTextAreaElement).value = '';
         (document.getElementById('yearInput') as HTMLInputElement).value = '';
-        (document.getElementById('categoryInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('identifierSelect') as HTMLSelectElement).value = '';
+        (document.getElementById('typeSelect') as HTMLSelectElement).value = '';
       } else {
         const errorText = await response.text(); // Get the response text to display
         console.error('Server Error:', errorText);
@@ -221,14 +247,12 @@ const Add: React.FC = () => {
       alert('An error occurred while adding the study.');
     }
   };
-  
-  
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-      <IonBackButton className='back' defaultHref="/" />
+          <IonBackButton className='back' defaultHref="/" />
           <IonTitle>Home</IonTitle><br />
         </IonToolbar>
       </IonHeader>
@@ -241,7 +265,7 @@ const Add: React.FC = () => {
         </div>
 
         <IonCard ><br />
-          <IonList  className='ionlist'>
+          <IonList className='ionlist'>
             <IonItem >
               <IonTextarea id="titleInput" label="TITLE: " autoGrow={true} ></IonTextarea>
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('titleInput')} />
@@ -266,9 +290,23 @@ const Add: React.FC = () => {
               <IonInput id="yearInput" label="YEAR: "></IonInput>
             </IonItem>
 
-            <IonItem >
-              <IonTextarea id="categoryInput" label="IDENTIFIER: " autoGrow={true}></IonTextarea>
+            <IonItem>
+              <IonSelect id="typeSelect" placeholder="Select Program" onIonChange={handleProgramChange}>
+                <IonSelectOption value="BSIT">BSIT</IonSelectOption>
+                <IonSelectOption value="BSBA">BSBA</IonSelectOption>
+                <IonSelectOption value="TEP">TEP</IonSelectOption>
+                {/* Add more options as needed */}
+              </IonSelect>
             </IonItem>
+
+            <IonItem>
+              <IonSelect id="identifierSelect" placeholder="Select Identifier">
+                {identifierOptions.map((option, index) => (
+                  <IonSelectOption key={index} value={option}>{option}</IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+            
             <br />
             <IonButton color={'dark'} className='add' onClick={handleSubmit}>ADD</IonButton><br />
             <br />
