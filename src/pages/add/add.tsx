@@ -13,7 +13,9 @@ import {
   IonIcon, 
   IonTextarea,
   IonModal,
-  IonActionSheet
+  IonActionSheet,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/react';
 import { addCircle } from 'ionicons/icons';
 import Tesseract from 'tesseract.js';
@@ -25,6 +27,8 @@ const Add: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [currentInputId, setCurrentInputId] = useState<string | null>(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<string>('');
+  const [identifierOptions, setIdentifierOptions] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -122,27 +126,71 @@ const Add: React.FC = () => {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         if (context) {
-          canvas.width = image.width;
-          canvas.height = image.height;
-          context.drawImage(image, 0, 0);
-          
+          // Resize image to improve OCR accuracy
+          const newWidth = image.width * 2;
+          const newHeight = image.height * 2;
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+          context.drawImage(image, 0, 0, newWidth, newHeight);
+  
+          // Grayscale conversion
           const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
           const data = imageData.data;
-
+  
           for (let i = 0; i < data.length; i += 4) {
             const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-            const threshold = avg > 128 ? 255 : 0;
-            data[i] = threshold;
-            data[i + 1] = threshold;
-            data[i + 2] = threshold;
+            data[i] = avg;
+            data[i + 1] = avg;
+            data[i + 2] = avg;
           }
-
+  
+          // Sharpening filter to enhance text edges
+          const kernel = [
+            [0, -1, 0],
+            [-1, 5, -1],
+            [0, -1, 0]
+          ];
+          applyKernel(imageData, canvas.width, canvas.height, kernel);
+  
           context.putImageData(imageData, 0, 0);
           resolve(canvas);
         }
       };
     });
   };
+  
+  // Helper function for applying a kernel filter (for sharpening)
+  const applyKernel = (imageData: ImageData, width: number, height: number, kernel: number[][]) => {
+    const data = imageData.data;
+    const newData = new Uint8ClampedArray(data);
+    const kernelSize = kernel.length;
+    const halfKernel = Math.floor(kernelSize / 2);
+  
+    for (let y = halfKernel; y < height - halfKernel; y++) {
+      for (let x = halfKernel; x < width - halfKernel; x++) {
+        const idx = (y * width + x) * 4;
+  
+        let r = 0, g = 0, b = 0;
+        for (let ky = 0; ky < kernelSize; ky++) {
+          for (let kx = 0; kx < kernelSize; kx++) {
+            const i = ((y + ky - halfKernel) * width + (x + kx - halfKernel)) * 4;
+            r += data[i] * kernel[ky][kx];
+            g += data[i + 1] * kernel[ky][kx];
+            b += data[i + 2] * kernel[ky][kx];
+          }
+        }
+  
+        newData[idx] = Math.min(Math.max(r, 0), 255);
+        newData[idx + 1] = Math.min(Math.max(g, 0), 255);
+        newData[idx + 2] = Math.min(Math.max(b, 0), 255);
+      }
+    }
+  
+    for (let i = 0; i < data.length; i++) {
+      data[i] = newData[i];
+    }
+  };
+  
 
   const performOCRFromDataUrl = async (dataUrl: string): Promise<string> => {
     try {
@@ -183,6 +231,67 @@ const Add: React.FC = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
+  const handleProgramChange = (event: CustomEvent) => {
+    const program = (event.detail.value as string);
+    setSelectedProgram(program);
+
+    // Update identifier options based on the selected program
+    switch (program) {
+      case 'BSIT':
+        setIdentifierOptions(['WEB-BASED', 'WEB-APP', 'MOBILE APP', 'IOT']);
+        break;
+      case 'TEP':
+        setIdentifierOptions(['Early Childhood Education', 'Secondary Education', 'Elementary Education']);
+        break;
+      case 'BSBA':
+        setIdentifierOptions(['Marketing Management', 'Financial Management', 'Operations Management']);
+        break;
+      default:
+        setIdentifierOptions([]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const title = (document.getElementById('titleInput') as HTMLTextAreaElement).value;
+    const author = (document.getElementById('authorsInput') as HTMLTextAreaElement).value;
+    const abstract = (document.getElementById('abstractInput') as HTMLTextAreaElement).value;
+    const keywords = (document.getElementById('tagsInput') as HTMLTextAreaElement).value;
+    const year = (document.getElementById('yearInput') as HTMLInputElement).value;
+    const identifier = (document.getElementById('identifierSelect') as HTMLSelectElement).value;
+    const type = (document.getElementById('typeSelect') as HTMLSelectElement).value;
+
+    console.log({ title, author, abstract, keywords, year, identifier, type });
+
+    try {
+      const response = await fetch('http://localhost:3001/add-study', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, author, abstract, keywords, year, identifier, type }),
+      });
+
+      if (response.ok) {
+        alert('Study added successfully!');
+        // Clear the input fields after successful addition
+        (document.getElementById('titleInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('authorsInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('abstractInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('tagsInput') as HTMLTextAreaElement).value = '';
+        (document.getElementById('yearInput') as HTMLInputElement).value = '';
+        (document.getElementById('identifierSelect') as HTMLSelectElement).value = '';
+        (document.getElementById('typeSelect') as HTMLSelectElement).value = '';
+      } else {
+        const errorText = await response.text(); // Get the response text to display
+        console.error('Server Error:', errorText);
+        alert(`Failed to add study: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error adding study:', error);
+      alert('An error occurred while adding the study.');
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -200,7 +309,7 @@ const Add: React.FC = () => {
         </div>
 
         <IonCard ><br />
-          <IonList  className='ionlist'>
+          <IonList className='ionlist'>
             <IonItem >
               <IonTextarea id="titleInput" label="TITLE: " autoGrow={true} ></IonTextarea>
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('titleInput')} />
@@ -221,16 +330,29 @@ const Add: React.FC = () => {
               <IonIcon icon={addCircle} slot="end" onClick={() => handleCapture('tagsInput')} />
             </IonItem>
 
-            {/* New Category Text Area */}
-            <IonItem >
-              <IonTextarea id="categoryInput" label="IDENTIFIER: " autoGrow={true}></IonTextarea>
-            </IonItem>
-
             <IonItem >
               <IonInput id="yearInput" label="YEAR: "></IonInput>
             </IonItem>
+
+            <IonItem>
+              <IonSelect id="typeSelect" placeholder="Select Program" onIonChange={handleProgramChange}>
+                <IonSelectOption value="BSIT">BSIT</IonSelectOption>
+                <IonSelectOption value="BSBA">BSBA</IonSelectOption>
+                <IonSelectOption value="TEP">TEP</IonSelectOption>
+                {/* Add more options as needed */}
+              </IonSelect>
+            </IonItem>
+
+            <IonItem>
+              <IonSelect id="identifierSelect" placeholder="Select Identifier">
+                {identifierOptions.map((option, index) => (
+                  <IonSelectOption key={index} value={option}>{option}</IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+            
             <br />
-            <IonButton color={'dark'} className='add'>ADD</IonButton><br />
+            <IonButton color={'dark'} className='add' onClick={handleSubmit}>ADD</IonButton><br />
             <br />
           </IonList>
         </IonCard>

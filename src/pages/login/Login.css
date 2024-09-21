@@ -1,0 +1,38 @@
+.admin {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .admin h1{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+    font-weight: bolder;
+  }
+  .admin img {
+    margin-top: 15%;
+    max-width: 50%; /* Make logo responsive */
+    height: auto;
+  }
+  
+  .login-form {
+    flex-direction: column;
+    align-items: center; /* Center items */
+  }
+  
+  .label {
+    text-align: left; /* Align labels left for better UX */
+  }
+  
+  .logbut {
+    margin-top: 20px; /* Space above the button */
+    width: 50%; /* Full width for button */
+    margin-left: 50%;
+  }
+  
+  @media (min-width: 768px) {
+    .login-form {
+      width: 50%; /* Reduce width on larger screens */
+      margin: 0 auto; /* Center on larger screens */
+    }
+  }
+  

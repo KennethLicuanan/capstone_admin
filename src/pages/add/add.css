@@ -18,9 +18,13 @@
   }
   .ionlist{
     font-weight: bolder;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   }
   .add{
     margin-left: 65%;
     width: 30%;
   }
   
+  .back{
+    height: 50px;
+  }
