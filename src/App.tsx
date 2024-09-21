@@ -5,6 +5,7 @@ import Login from './pages/login/Login';
 import Home from './pages/home/Home';
 import Add from './pages/add/add';
 import User from './pages/user/user';
+import Studies from './pages/studies/studies';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -64,6 +65,11 @@ const App: React.FC = () => (
         <Route exact path="/User">
           <Redirect to="/user" />
           <User />
+        </Route>
+
+        <Route exact path="/Studies">
+          <Redirect to="/studies" />
+          <Studies />
         </Route>
 
       </IonRouterOutlet>

@@ -106,12 +106,14 @@ const Home: React.FC = () => {
               </div>
             </div>
           </IonCard>
-          
           <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/add">
             ADD STUDY
           </IonButton>
           <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/user">
-            USER LOGS
+            MANAGE USER LOGS
+          </IonButton>
+          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/studies">
+            MANAGE STUDIES
           </IonButton>
           <IonButton expand="block" color={'danger'} className="custom-button" onClick={handleLogout}>
             Logout
