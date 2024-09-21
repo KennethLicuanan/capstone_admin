@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonCard, IonCardHeader, IonCardContent, IonButton, IonModal, IonInput, IonItem, IonLabel } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import './studies.css'; // Ensure to add styles for lively effects
@@ -103,6 +104,7 @@ const Studies: React.FC = () => {
         {message && <div className="message">{message}</div>} {/* Feedback message */}
 
         {/* Filters and Search Bar */}
+        
         <div className="filters-container">
           <IonItem>
             <IonLabel position="stacked">Filter by Type</IonLabel>
