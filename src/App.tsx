@@ -46,7 +46,7 @@ const App: React.FC = () => (
           <Login />
         </Route>
 
-        <Route exact path="/login">
+        <Route exact path="/">
           <Login />
         </Route>
         

@@ -64,7 +64,7 @@ const Home: React.FC = () => {
           <div className="logo">
             <img src="src/assets/book.png" height="150" alt="logo" />
             <h1>DIGI-BOOKS <br /> DASHBOARD</h1>
-          </div><br /><br />
+          </div>
 
           <IonCard color={"primary"} className='stats'>
             <h1>ANALYTICS</h1>
