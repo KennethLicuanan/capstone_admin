@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Middleware
 app.use(cors());
@@ -77,6 +77,28 @@ app.post('/add-study', (req, res) => {
     res.status(200).send('Study added successfully!');
   });
 });
+
+// Route to fetch user activity logs
+app.get('/user-logs', (req, res) => {
+  const sql = `
+    SELECT u.credentials, a.activity, a.date
+    FROM usertbl u
+    JOIN activitylog_tbl a ON u.user_id = a.user_id
+    ORDER BY a.date DESC
+  `;
+
+  console.log('Executing SQL:', sql); // Log the SQL query
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Database error:', err.message);
+      return res.status(500).send(`Error fetching user logs: ${err.message}`);
+    }
+    console.log('Fetched logs:', result); // Log the result
+    res.status(200).json(result);
+  });
+});
+
+
 
 // Start the server
 app.listen(port, () => {

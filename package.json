@@ -8,6 +8,7 @@
   "cors": "^latest",
   "body-parser": "^latest",
   "scripts": {
+    "start": "node server.js & ionic serve",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -38,6 +39,7 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.3.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
     "tesseract.js": "^5.1.1"

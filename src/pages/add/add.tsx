@@ -126,27 +126,71 @@ const Add: React.FC = () => {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         if (context) {
-          canvas.width = image.width;
-          canvas.height = image.height;
-          context.drawImage(image, 0, 0);
-          
+          // Resize image to improve OCR accuracy
+          const newWidth = image.width * 2;
+          const newHeight = image.height * 2;
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+          context.drawImage(image, 0, 0, newWidth, newHeight);
+  
+          // Grayscale conversion
           const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
           const data = imageData.data;
-
+  
           for (let i = 0; i < data.length; i += 4) {
             const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-            const threshold = avg > 128 ? 255 : 0;
-            data[i] = threshold;
-            data[i + 1] = threshold;
-            data[i + 2] = threshold;
+            data[i] = avg;
+            data[i + 1] = avg;
+            data[i + 2] = avg;
           }
-
+  
+          // Sharpening filter to enhance text edges
+          const kernel = [
+            [0, -1, 0],
+            [-1, 5, -1],
+            [0, -1, 0]
+          ];
+          applyKernel(imageData, canvas.width, canvas.height, kernel);
+  
           context.putImageData(imageData, 0, 0);
           resolve(canvas);
         }
       };
     });
   };
+  
+  // Helper function for applying a kernel filter (for sharpening)
+  const applyKernel = (imageData: ImageData, width: number, height: number, kernel: number[][]) => {
+    const data = imageData.data;
+    const newData = new Uint8ClampedArray(data);
+    const kernelSize = kernel.length;
+    const halfKernel = Math.floor(kernelSize / 2);
+  
+    for (let y = halfKernel; y < height - halfKernel; y++) {
+      for (let x = halfKernel; x < width - halfKernel; x++) {
+        const idx = (y * width + x) * 4;
+  
+        let r = 0, g = 0, b = 0;
+        for (let ky = 0; ky < kernelSize; ky++) {
+          for (let kx = 0; kx < kernelSize; kx++) {
+            const i = ((y + ky - halfKernel) * width + (x + kx - halfKernel)) * 4;
+            r += data[i] * kernel[ky][kx];
+            g += data[i + 1] * kernel[ky][kx];
+            b += data[i + 2] * kernel[ky][kx];
+          }
+        }
+  
+        newData[idx] = Math.min(Math.max(r, 0), 255);
+        newData[idx + 1] = Math.min(Math.max(g, 0), 255);
+        newData[idx + 2] = Math.min(Math.max(b, 0), 255);
+      }
+    }
+  
+    for (let i = 0; i < data.length; i++) {
+      data[i] = newData[i];
+    }
+  };
+  
 
   const performOCRFromDataUrl = async (dataUrl: string): Promise<string> => {
     try {
@@ -197,10 +241,10 @@ const Add: React.FC = () => {
         setIdentifierOptions(['WEB-BASED', 'WEB-APP', 'MOBILE APP', 'IOT']);
         break;
       case 'TEP':
-        setIdentifierOptions(['BEED', 'BSED', 'BECE']);
+        setIdentifierOptions(['Early Childhood Education', 'Secondary Education', 'Elementary Education']);
         break;
       case 'BSBA':
-        setIdentifierOptions(['MM', 'FM', 'OM']);
+        setIdentifierOptions(['Marketing Management', 'Financial Management', 'Operations Management']);
         break;
       default:
         setIdentifierOptions([]);
@@ -219,7 +263,7 @@ const Add: React.FC = () => {
     console.log({ title, author, abstract, keywords, year, identifier, type });
 
     try {
-      const response = await fetch('http://localhost:3000/add-study', {
+      const response = await fetch('http://localhost:3001/add-study', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

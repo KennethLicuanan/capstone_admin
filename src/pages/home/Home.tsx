@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonIcon } from '@ionic/react';
+import { laptop, briefcase, school } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom'; // Import useHistory for navigation
 import './Home.css';
 
 const Home: React.FC = () => {
+  const history = useHistory(); // Initialize history for navigation
   const [totalStudies, setTotalStudies] = useState<number>(0);
   const [studiesByType, setStudiesByType] = useState<{ type: string; count: number }[]>([]);
 
   const fetchTotalStudies = () => {
-    fetch('http://localhost:3000/total-studies')
+    fetch('http://localhost:3001/total-studies')
       .then(response => response.json())
       .then(data => {
         console.log('Total Studies API response:', data);
@@ -17,7 +20,7 @@ const Home: React.FC = () => {
   };
 
   const fetchStudiesByType = () => {
-    fetch('http://localhost:3000/studies-by-type')
+    fetch('http://localhost:3001/studies-by-type')
       .then(response => response.json())
       .then(data => {
         console.log('Studies by Type API response:', data);
@@ -44,19 +47,65 @@ const Home: React.FC = () => {
     return study ? study.count : 0;
   };
 
+  const handleLogout = () => {
+    // Clear any authentication state here if applicable
+    history.push('/login'); // Redirect to the login page
+  };
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Home</IonTitle>
+          <IonTitle>Admnistrator Dashboard</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>
         <div className="container">
           <div className="logo">
             <img src="src/assets/book.png" height="150" alt="logo" />
-            <h1>DIGI-BOOKS <br /> ADMIN</h1>
-          </div>
+            <h1>DIGI-BOOKS <br /> DASHBOARD</h1>
+          </div><br /><br />
+
+          <IonCard color={"primary"} className='stats'>
+            <h1>ANALYTICS</h1>
+            <div className="analytics-section">
+              <div className="stat-item">
+                <IonIcon icon={laptop} slot="start" />
+                <label>TOTAL RESEARCH STUDIES</label>
+                <div className="bar">
+                  <div className="bar-inner bar-total" style={{ width: getBarWidth(totalStudies) }}></div>
+                </div>
+                <p>{totalStudies} studies available</p>
+              </div>
+
+              <div className="stat-item">
+                <IonIcon icon={school} slot="start" />
+                <label>TEACHERS EDUCATION PROGRAM</label>
+                <div className="bar">
+                  <div className="bar-inner bar-tep" style={{ width: getBarWidth(getStudyCount('TEP')) }}></div>
+                </div>
+                <p>{getStudyCount('TEP')} new studies</p>
+              </div>
+
+              <div className="stat-item">
+                <IonIcon icon={laptop} slot="start" />
+                <label>COLLEGE OF COMPUTER STUDIES</label>
+                <div className="bar">
+                  <div className="bar-inner bar-it" style={{ width: getBarWidth(getStudyCount('BSIT')) }}></div>
+                </div>
+                <p>{getStudyCount('BSIT')} new studies</p>
+              </div>
+
+              <div className="stat-item">
+                <IonIcon icon={briefcase} slot="start" />
+                <label>BUSINESS ADMINISTRATION STUDIES</label>
+                <div className="bar">
+                  <div className="bar-inner bar-ba" style={{ width: getBarWidth(getStudyCount('BSBA')) }}></div>
+                </div>
+                <p>{getStudyCount('BSBA')} new studies</p>
+              </div>
+            </div>
+          </IonCard>
           
           <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/add">
             ADD STUDY
@@ -64,50 +113,11 @@ const Home: React.FC = () => {
           <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/user">
             USER LOGS
           </IonButton>
-        </div><br />
-
-        <IonCard color={"primary"} className='stats'>
-          <h1>ANALYTICS</h1>
-          <div className="analytics-section">
-            <div className="stat-item">
-              <label>TOTAL RESEARCH STUDIES</label>
-              <div className="bar">
-                <div className="bar-inner bar-total" style={{ width: getBarWidth(totalStudies) }}></div>
-              </div>
-              <p>{totalStudies} studies available</p>
-            </div>
-
-            <div className="stat-item">
-              <label>TOTAL STUDIES OF TEP PROGRAM</label>
-              <div className="bar">
-                <div className="bar-inner bar-tep" style={{ width: getBarWidth(getStudyCount('TEP')) }}></div>
-              </div>
-              <p>{getStudyCount('TEP')} new studies</p>
-            </div>
-            <div className="stat-item">
-              <label>TOTAL STUDIES OF IT PROGRAM</label>
-              <div className="bar">
-                <div className="bar-inner bar-it" style={{ width: getBarWidth(getStudyCount('BSIT')) }}></div>
-              </div>
-              <p>{getStudyCount('BSIT')} new studies</p>
-            </div>
-            <div className="stat-item">
-              <label>TOTAL STUDIES OF BA PROGRAM</label>
-              <div className="bar">
-                <div className="bar-inner bar-ba" style={{ width: getBarWidth(getStudyCount('BSBA')) }}></div>
-              </div>
-              <p>{getStudyCount('BSBA')} new studies</p>
-            </div>
-
-            <div className="stat-item">
-              <label>ACTIVE USERS</label>
-              <div className="bar">
-                <div className="bar-inner bar-active-users"></div>
-              </div>
-              <p>90% of users from IT major</p>
-            </div>
-          </div>
-        </IonCard>
+          <IonButton expand="block" color={'danger'} className="custom-button" onClick={handleLogout}>
+            Logout
+          </IonButton>
+        </div>
+        <br />
       </IonContent>
     </IonPage>
   );
