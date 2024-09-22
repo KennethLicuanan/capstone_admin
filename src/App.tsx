@@ -5,6 +5,7 @@ import Login from './pages/login/Login';
 import Home from './pages/home/Home';
 import Add from './pages/add/add';
 import User from './pages/user/user';
+import Studies from './pages/studies/studies';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -42,28 +43,30 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/login">
+        <Route exact path="/capstone_admin/login">
+        <Redirect to="/capstone_admin/Login" />
           <Login />
         </Route>
 
-        <Route exact path="/login">
+        <Route exact path="/capstone_admin/login">
           <Login />
         </Route>
         
-        <Route exact path="/home">
-          <Redirect to="/Home" />
+        <Route exact path="/capstone_admin/home">
           <Home/>
         </Route>
 
         
-        <Route exact path="/Add">
-          <Redirect to="/add" />
+        <Route exact path="/capstone_admin/Add">
           <Add />
         </Route>
 
-        <Route exact path="/User">
-          <Redirect to="/user" />
+        <Route exact path="/capstone_admin/User">
           <User />
+        </Route>
+
+        <Route exact path="/capstone_admin/Studies">
+          <Studies />
         </Route>
 
       </IonRouterOutlet>

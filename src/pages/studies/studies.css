@@ -1,0 +1,76 @@
+
+  .studies-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .studies-container h2{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+    font-size: 25px;
+  }
+
+  .studies-container p{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+    font-size: 15px;
+  }
+  
+  .study-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .study-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .see-more {
+    color: rgb(103, 103, 255);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .message {
+    text-align: center;
+    color: green;
+    margin: 10px 0;
+    animation: fadeIn 0.5s;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+
+
+  .filter-button-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .filter-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+  }
+  

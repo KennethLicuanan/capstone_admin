@@ -303,7 +303,7 @@ const Add: React.FC = () => {
       <IonContent className="ion-padding" fullscreen>
         <div className="container">
           <div className="logo">
-            <img src="src/assets/book.png" height="150" alt="logo" />
+            <img src="https://github.com/KennethLicuanan/capstone_admin/blob/main/src/assets/book.png?raw=true" height="200" alt="logo" />
             <h1>DIGI-BOOKS <br /> ADD STUDY</h1>
           </div>
         </div>

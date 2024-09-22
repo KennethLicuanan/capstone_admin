@@ -98,6 +98,50 @@ app.get('/user-logs', (req, res) => {
   });
 });
 
+// Route to fetch all studies
+app.get('/studies', (req, res) => {
+  const sql = 'SELECT * FROM studiestbl';
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Database error:', err.message);
+      return res.status(500).send(`Error fetching studies: ${err.message}`);
+    }
+    res.status(200).json(result);
+  });
+});
+
+// Route to delete a study by ID
+app.delete('/delete-study/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM studiestbl WHERE id = ?';
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err.message);
+      return res.status(500).send(`Error deleting study: ${err.message}`);
+    }
+    res.status(200).send('Study deleted successfully!');
+  });
+});
+
+// Route to update a study by ID
+app.put('/update-study/:id', (req, res) => {
+  const { id } = req.params;
+  const { title, author, abstract, keywords, year, identifier, type } = req.body;
+  const sql = 'UPDATE studiestbl SET title = ?, author = ?, abstract = ?, keywords = ?, year = ?, identifier = ?, type = ? WHERE id = ?';
+  
+  const values = [title, author, abstract, keywords, year, identifier, type, id];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Database error:', err.message);
+      return res.status(500).send(`Error updating study: ${err.message}`);
+    }
+    res.status(200).send('Study updated successfully!');
+  });
+});
+
 
 
 // Start the server
