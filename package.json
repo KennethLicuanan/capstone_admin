@@ -3,11 +3,11 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": "https://KennethLicuanan.github.io/capstone_admin/",
   "express": "^latest",
   "mysql": "^latest",
   "cors": "^latest",
   "body-parser": "^latest",
+  "homepage": "https://KennethLicuanan.github.io/capstone_admin/",
   "scripts": {
     "predeploy" : "npm run build",
     "deploy" : "gh-pages -d dist",
