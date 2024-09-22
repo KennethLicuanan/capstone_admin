@@ -56,15 +56,15 @@ const App: React.FC = () => (
           <Home/>
         </Route>
         
-        <Route exact path="/capstone_admin/Add">
+        <Route exact path="/capstone_admin/Home/Add">
           <Add />
         </Route>
 
-        <Route exact path="/capstone_admin/User">
+        <Route exact path="/capstone_admin/Home/User">
           <User />
         </Route>
 
-        <Route exact path="/capstone_admin/Studies">
+        <Route exact path="/capstone_admin/Home/Studies">
           <Studies />
         </Route>
 
