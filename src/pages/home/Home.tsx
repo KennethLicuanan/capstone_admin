@@ -106,13 +106,13 @@ const Home: React.FC = () => {
               </div>
             </div>
           </IonCard>
-          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/add">
+          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/Home/add">
             ADD STUDY
           </IonButton>
-          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/user">
+          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/Home/user">
             MANAGE USER LOGS
           </IonButton>
-          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/studies">
+          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/Home/studies">
             MANAGE STUDIES
           </IonButton>
           <IonButton expand="block" color={'danger'} className="custom-button" onClick={handleLogout}>
