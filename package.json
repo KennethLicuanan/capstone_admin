@@ -7,7 +7,7 @@
   "mysql": "^latest",
   "cors": "^latest",
   "body-parser": "^latest",
-  "homepage": "https://KennethLicuanan.github.io/capstone_admin/",
+  "homepage": "https://KennethLicuanan.github.io/capstone_admin/Login",
   "scripts": {
     "predeploy" : "npm run build",
     "deploy" : "gh-pages -d dist",
