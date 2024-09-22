@@ -97,7 +97,7 @@ const Studies: React.FC = () => {
 
       <IonContent className="ion-padding" fullscreen>
         <div className="logo">
-          <img src="src/assets/book.png" className="logo-img" alt="logo" />
+          <img src="https://github.com/KennethLicuanan/capstone_admin/blob/main/src/assets/book.png?raw=true" className="logo-img" alt="logo" />
           <h1 className="logo-text">DIGI-BOOKS <br /> STUDIES</h1>
         </div>
 

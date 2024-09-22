@@ -43,32 +43,29 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/login">
+        <Route exact path="/capstone_admin/login">
+        <Redirect to="/capstone_admin/Login" />
           <Login />
         </Route>
 
-        <Route exact path="/">
+        <Route exact path="/capstone_admin/login">
           <Login />
         </Route>
         
-        <Route exact path="/home">
-          <Redirect to="/Home" />
+        <Route exact path="/capstone_admin/home">
           <Home/>
         </Route>
 
         
-        <Route exact path="/Add">
-          <Redirect to="/add" />
+        <Route exact path="/capstone_admin/Add">
           <Add />
         </Route>
 
-        <Route exact path="/User">
-          <Redirect to="/user" />
+        <Route exact path="/capstone_admin/User">
           <User />
         </Route>
 
-        <Route exact path="/Studies">
-          <Redirect to="/studies" />
+        <Route exact path="/capstone_admin/Studies">
           <Studies />
         </Route>
 

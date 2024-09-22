@@ -62,7 +62,7 @@ const Home: React.FC = () => {
       <IonContent className="ion-padding" fullscreen>
         <div className="container">
           <div className="logo">
-            <img src="src/assets/book.png" height="150" alt="logo" />
+            <img src="https://github.com/KennethLicuanan/capstone_admin/blob/main/src/assets/book.png?raw=true" height="200" alt="logo" />
             <h1>DIGI-BOOKS <br /> DASHBOARD</h1>
           </div>
 
@@ -106,13 +106,13 @@ const Home: React.FC = () => {
               </div>
             </div>
           </IonCard>
-          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/add">
+          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/add">
             ADD STUDY
           </IonButton>
-          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/user">
+          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/user">
             MANAGE USER LOGS
           </IonButton>
-          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/studies">
+          <IonButton expand="block" color={'warning'} className="custom-button" routerLink="/capstone_admin/studies">
             MANAGE STUDIES
           </IonButton>
           <IonButton expand="block" color={'danger'} className="custom-button" onClick={handleLogout}>
