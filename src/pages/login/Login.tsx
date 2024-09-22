@@ -49,7 +49,7 @@ const Login: React.FC = () => {
         />
 
           <div className="admin">
-            <img src="https://github.com/KennethLicuanan/capstone_admin/blob/main/src/assets/book.png?raw=true" height="150" alt="logo" />
+            <img src="src\assets\book.png" height="150" alt="logo" />
             <h1>DIGI-BOOKS <br /> ADMIN</h1></div>
 <br />
         {/* Login Form */}
