@@ -297,7 +297,7 @@ const Add: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonBackButton className='back' defaultHref="/" />
-          <IonTitle>Home</IonTitle><br />
+          <IonTitle>Add studies</IonTitle><br />
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>
