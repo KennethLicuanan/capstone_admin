@@ -263,7 +263,7 @@ const Add: React.FC = () => {
     console.log({ title, author, abstract, keywords, year, identifier, type });
 
     try {
-      const response = await fetch('http://localhost:3001/add-study', {
+      const response = await fetch('http://localhost:3000/add-study', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

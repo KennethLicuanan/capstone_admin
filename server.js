@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 // Middleware
 app.use(cors());
@@ -111,7 +111,7 @@ app.get('/studies', (req, res) => {
   });
 });
 
-// Route to delete a study by ID
+// Route to delete a study by id
 app.delete('/delete-study/:id', (req, res) => {
   const { id } = req.params;
   const sql = 'DELETE FROM studiestbl WHERE id = ?';
@@ -129,8 +129,10 @@ app.delete('/delete-study/:id', (req, res) => {
 app.put('/update-study/:id', (req, res) => {
   const { id } = req.params;
   const { title, author, abstract, keywords, year, identifier, type } = req.body;
+
+  console.log('Updating study:', { id, title, author, abstract, keywords, year, identifier, type }); // Debugging line
+
   const sql = 'UPDATE studiestbl SET title = ?, author = ?, abstract = ?, keywords = ?, year = ?, identifier = ?, type = ? WHERE id = ?';
-  
   const values = [title, author, abstract, keywords, year, identifier, type, id];
 
   db.query(sql, values, (err, result) => {
@@ -141,6 +143,7 @@ app.put('/update-study/:id', (req, res) => {
     res.status(200).send('Study updated successfully!');
   });
 });
+
 
 
 
