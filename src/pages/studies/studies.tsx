@@ -18,7 +18,7 @@ const Studies: React.FC = () => {
   // Fetch studies from the backend
   const fetchStudies = async () => {
     try {
-      const response = await fetch('http://localhost:3000/studies');
+      const response = await fetch('https://k0qhld44-3000.asse.devtunnels.ms/studies');
       const data = await response.json();
       setStudies(data);
     } catch (error) {
