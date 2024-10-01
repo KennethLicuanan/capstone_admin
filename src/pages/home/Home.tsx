@@ -10,7 +10,7 @@ const Home: React.FC = () => {
   const [studiesByType, setStudiesByType] = useState<{ type: string; count: number }[]>([]);
 
   const fetchTotalStudies = () => {
-    fetch('http://localhost:3001/total-studies')
+    fetch('https://k0qhld44-3000.asse.devtunnels.ms/total-studies')
       .then(response => response.json())
       .then(data => {
         console.log('Total Studies API response:', data);
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
   };
 
   const fetchStudiesByType = () => {
-    fetch('http://localhost:3001/studies-by-type')
+    fetch('https://k0qhld44-3000.asse.devtunnels.ms/studies-by-type')
       .then(response => response.json())
       .then(data => {
         console.log('Studies by Type API response:', data);

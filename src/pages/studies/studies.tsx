@@ -18,7 +18,7 @@ const Studies: React.FC = () => {
   // Fetch studies from the backend
   const fetchStudies = async () => {
     try {
-      const response = await fetch('http://localhost:3001/studies');
+      const response = await fetch('https://k0qhld44-3000.asse.devtunnels.ms/studies');
       const data = await response.json();
       setStudies(data);
     } catch (error) {
@@ -28,7 +28,7 @@ const Studies: React.FC = () => {
 
   const deleteStudy = async (id: number) => {
     try {
-      await fetch(`http://localhost:3001/delete-study/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:3000/delete-study/${id}`, { method: 'DELETE' });
       setMessage('Study deleted successfully!');
       fetchStudies();  // Refresh studies list after deletion
     } catch (error) {
@@ -45,18 +45,22 @@ const Studies: React.FC = () => {
   const handleUpdateSubmit = async () => {
     if (selectedStudy) {
       try {
-        const response = await fetch(`http://localhost:3001/update-study/${selectedStudy.id}`, {
+        const response = await fetch(`http://localhost:3000/update-study/${selectedStudy.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(selectedStudy),
         });
-
+  
         if (response.ok) {
           fetchStudies();  // Refresh the list
           setShowModal(false);  // Close the modal
           setMessage('Study updated successfully!');
+        } else {
+          const errorText = await response.text();
+          console.error('Update failed:', errorText);
+          setMessage('Failed to update study. ' + errorText);
         }
       } catch (error) {
         console.error('Error updating study:', error);
@@ -64,6 +68,8 @@ const Studies: React.FC = () => {
       }
     }
   };
+  
+  
 
   const toggleAbstract = (id: number) => {
     setExpandedAbstract(expandedAbstract === id ? null : id);

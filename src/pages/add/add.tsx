@@ -263,7 +263,7 @@ const Add: React.FC = () => {
     console.log({ title, author, abstract, keywords, year, identifier, type });
 
     try {
-      const response = await fetch('http://localhost:3001/add-study', {
+      const response = await fetch('https://k0qhld44-3000.asse.devtunnels.ms/add-study', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

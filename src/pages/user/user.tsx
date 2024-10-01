@@ -8,7 +8,7 @@ const User: React.FC = () => {
   // Function to fetch user logs
   const fetchUserLogs = async () => {
     try {
-      const response = await fetch('http://localhost:3001/user-logs');
+      const response = await fetch('https://k0qhld44-3000.asse.devtunnels.ms/user-logs');
       const data = await response.json();
       setUserLogs(data);
     } catch (error) {
