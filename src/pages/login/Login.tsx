@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import {
   IonContent,
-  IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonButton,
   IonInput,
   IonItem,

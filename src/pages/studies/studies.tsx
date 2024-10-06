@@ -1,11 +1,21 @@
-// @ts-nocheck
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonCard, IonCardHeader, IonCardContent, IonButton, IonModal, IonInput, IonItem, IonLabel } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import './studies.css'; // Ensure to add styles for lively effects
 
+interface Study {
+  id: number;
+  title: string;
+  author: string;
+  abstract: string;
+  keywords: string;
+  year: number;
+  identifier: string;
+  type: string;
+}
+
 const Studies: React.FC = () => {
-  const [studies, setStudies] = useState<{ id: number; title: string; author: string; abstract: string; keywords: string; year: number; identifier: string; type: string }[]>([]);
-  const [selectedStudy, setSelectedStudy] = useState<{ id: number; title: string; author: string; abstract: string; keywords: string; year: number; identifier: string; type: string } | null>(null);
+  const [studies, setStudies] = useState<Study[]>([]);
+  const [selectedStudy, setSelectedStudy] = useState<Study | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [expandedAbstract, setExpandedAbstract] = useState<number | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -28,7 +38,7 @@ const Studies: React.FC = () => {
 
   const deleteStudy = async (id: number) => {
     try {
-      await fetch(`http://localhost:3000/delete-study/${id}`, { method: 'DELETE' });
+      await fetch(`https://k0qhld44-3000.asse.devtunnels.ms/delete-study/${id}`, { method: 'DELETE' });
       setMessage('Study deleted successfully!');
       fetchStudies();  // Refresh studies list after deletion
     } catch (error) {
@@ -37,39 +47,36 @@ const Studies: React.FC = () => {
     }
   };
 
-  const updateStudy = (study: { id: number; title: string; author: string; abstract: string; keywords: string; year: number; identifier: string; type: string }) => {
+  const updateStudy = (study: Study) => {
     setSelectedStudy(study);
     setShowModal(true);
   };
 
   const handleUpdateSubmit = async () => {
-    if (selectedStudy) {
-      try {
-        const response = await fetch(`http://localhost:3000/update-study/${selectedStudy.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(selectedStudy),
+    try {
+        const response = await fetch(`https://k0qhld44-3000.asse.devtunnels.ms/update-study/${selectedStudy?.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(selectedStudy),
         });
-  
-        if (response.ok) {
-          fetchStudies();  // Refresh the list
-          setShowModal(false);  // Close the modal
-          setMessage('Study updated successfully!');
-        } else {
-          const errorText = await response.text();
-          console.error('Update failed:', errorText);
-          setMessage('Failed to update study. ' + errorText);
+
+        const data = await response.json();
+        console.log('Response from server:', data); // Log the response from the server
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to update');
         }
-      } catch (error) {
-        console.error('Error updating study:', error);
-        setMessage('Failed to update study.');
-      }
+
+        // Close the modal after a successful update
+        setMessage('Study updated successfully!'); // Optionally set a success message
+        fetchStudies(); // Optionally refresh the studies list after update
+
+    } catch (error) {
+        console.error('Error during update:', error.message);
+        setMessage('Failed to Update study.');
     }
-  };
-  
-  
+};
 
   const toggleAbstract = (id: number) => {
     setExpandedAbstract(expandedAbstract === id ? null : id);
@@ -110,19 +117,18 @@ const Studies: React.FC = () => {
         {message && <div className="message">{message}</div>} {/* Feedback message */}
 
         {/* Filters and Search Bar */}
-        
         <div className="filters-container">
           <IonItem>
             <IonLabel position="stacked">Filter by Type</IonLabel>
-            <IonInput value={typeFilter} onIonChange={(e) => setTypeFilter(e.detail.value!)} placeholder="Enter type..." />
+            <IonInput value={typeFilter} onIonChange={(e: CustomEvent<{ value: string | null }>) => setTypeFilter(e.detail.value || '')} placeholder="Enter type..." />
           </IonItem>
           <IonItem>
             <IonLabel position="stacked">Filter by Year</IonLabel>
-            <IonInput type="number" value={yearFilter} onIonChange={(e) => setYearFilter(e.detail.value! ? parseInt(e.detail.value!) : '')} placeholder="Enter year..." />
+            <IonInput type="number" value={yearFilter} onIonChange={(e: CustomEvent<{ value: string | null }>) => setYearFilter(e.detail.value ? parseInt(e.detail.value, 10) : '')} placeholder="Enter year..." />
           </IonItem>
           <IonItem>
             <IonLabel position="stacked">Search Keywords</IonLabel>
-            <IonInput value={searchQuery} onIonChange={(e) => setSearchQuery(e.detail.value!)} placeholder="Search by keywords..." />
+            <IonInput value={searchQuery} onIonChange={(e: CustomEvent<{ value: string | null }>) => setSearchQuery(e.detail.value || '')} placeholder="Search by keywords..." />
           </IonItem>
         </div>
 
@@ -171,36 +177,44 @@ const Studies: React.FC = () => {
               <h2>Update Study</h2>
               <IonItem>
                 <IonLabel position="stacked">Title</IonLabel>
-                <IonInput value={selectedStudy.title} onIonChange={(e) => setSelectedStudy({ ...selectedStudy, title: e.detail.value! })} />
+                <IonInput value={selectedStudy.title} onIonChange={(e: CustomEvent<{ value: string | null }>) => setSelectedStudy({ ...selectedStudy, title: e.detail.value || '' })} />
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Author</IonLabel>
-                <IonInput value={selectedStudy.author} onIonChange={(e) => setSelectedStudy({ ...selectedStudy, author: e.detail.value! })} />
+                <IonInput value={selectedStudy.author} onIonChange={(e: CustomEvent<{ value: string | null }>) => setSelectedStudy({ ...selectedStudy, author: e.detail.value || '' })} />
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Abstract</IonLabel>
-                <IonInput value={selectedStudy.abstract} onIonChange={(e) => setSelectedStudy({ ...selectedStudy, abstract: e.detail.value! })} />
+                <IonInput value={selectedStudy.abstract} onIonChange={(e: CustomEvent<{ value: string | null }>) => setSelectedStudy({ ...selectedStudy, abstract: e.detail.value || '' })} />
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Keywords</IonLabel>
-                <IonInput value={selectedStudy.keywords} onIonChange={(e) => setSelectedStudy({ ...selectedStudy, keywords: e.detail.value! })} />
+                <IonInput value={selectedStudy.keywords} onIonChange={(e: CustomEvent<{ value: string | null }>) => setSelectedStudy({ ...selectedStudy, keywords: e.detail.value || '' })} />
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Year</IonLabel>
-                <IonInput type="number" value={selectedStudy.year} onIonChange={(e) => setSelectedStudy({ ...selectedStudy, year: parseInt(e.detail.value!, 10) })} />
+              <IonLabel position="stacked">Year</IonLabel>
+              <IonInput
+                type="number"
+                value={selectedStudy.year ? selectedStudy.year.toString() : ''}  // Display as string for the input field
+                onIonChange={(e: CustomEvent<{ value: string | null }>) =>
+                  setSelectedStudy({ 
+                    ...selectedStudy, 
+                    year: e.detail.value ? parseInt(e.detail.value, 10) : 0  // Ensure 'year' is always a number, default to 0
+                  })
+                }
+              />
+            </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Identifier</IonLabel>
+                <IonInput value={selectedStudy.identifier} onIonChange={(e: CustomEvent<{ value: string | null }>) => setSelectedStudy({ ...selectedStudy, identifier: e.detail.value || '' })} />
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Type</IonLabel>
-                <IonInput value={selectedStudy.identifier} onIonChange={(e) => setSelectedStudy({ ...selectedStudy, identifier: e.detail.value! })} />
+                <IonInput value={selectedStudy.type} onIonChange={(e: CustomEvent<{ value: string | null }>) => setSelectedStudy({ ...selectedStudy, type: e.detail.value || '' })} />
               </IonItem>
-              <IonItem>
-                <IonLabel position="stacked">Course</IonLabel>
-                <IonInput value={selectedStudy.type} onIonChange={(e) => setSelectedStudy({ ...selectedStudy, type: e.detail.value! })} />
-              </IonItem>
-
               <div className="modal-buttons">
                 <IonButton color="primary" onClick={handleUpdateSubmit}>Save</IonButton>
-                <IonButton color="light" onClick={() => setShowModal(false)}>Cancel</IonButton>
+                <IonButton color="secondary" onClick={() => setShowModal(false)}>Back</IonButton>
               </div>
             </div>
           )}

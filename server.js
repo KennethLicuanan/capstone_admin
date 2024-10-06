@@ -125,24 +125,36 @@ app.delete('/delete-study/:id', (req, res) => {
   });
 });
 
-// Route to update a study by ID
 app.put('/update-study/:id', (req, res) => {
-  const { id } = req.params;
-  const { title, author, abstract, keywords, year, identifier, type } = req.body;
+    const { id } = req.params;
+    const { title, author, abstract, keywords, year, identifier, type } = req.body;
 
-  console.log('Updating study:', { id, title, author, abstract, keywords, year, identifier, type }); // Debugging line
+    // Log the received data
+    console.log('Received update data:', req.body);
 
-  const sql = 'UPDATE studiestbl SET title = ?, author = ?, abstract = ?, keywords = ?, year = ?, identifier = ?, type = ? WHERE id = ?';
-  const values = [title, author, abstract, keywords, year, identifier, type, id];
+    const sql = 'UPDATE studiestbl SET title = ?, author = ?, abstract = ?, keywords = ?, year = ?, identifier = ?, type = ? WHERE id = ?';
+    const values = [title, author, abstract, keywords, year, identifier, type, id];
 
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Database error:', err.message);
-      return res.status(500).send(`Error updating study: ${err.message}`);
-    }
-    res.status(200).send('Study updated successfully!');
-  });
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            // Log the database error and send a JSON response
+            console.error('Database error:', err.message);
+            return res.status(500).json({ message: `Error updating study: ${err.message}` });
+        }
+
+        if (result.affectedRows > 0) {
+            // Log the successful update and send a JSON response
+            console.log('Update successful:', { message: 'Study updated successfully!' });
+            return res.status(200).json({ message: 'Study updated successfully!' });
+        } else {
+            // Log if no study was found and send a JSON response
+            console.log('No study found with the given ID.');
+            return res.status(404).json({ message: 'No study found with the given ID.' });
+        }
+    });
 });
+
+
 
 
 
